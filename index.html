@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReposteriaShop - Utensilios profesionales</title>
+    <!-- Google Fonts para tipografías elegantes -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+    
+    <!-- ========== HEADER / NAVEGACIÓN ========== -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <h1>DIRO-<span>Cocina Y Repostería</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#inicio" class="active">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#categorias">Categorías</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="carrito-icono">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="contador">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== HERO / BANNER PRINCIPAL ========== -->
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-contenido">
+                <h2>Todo lo que necesitas <br>para <span>repostería profesional</span></h2>
+                <p>Utensilios de alta calidad para chefs y aficionados. Envíos a todo el país.</p>
+                <a href="#productos" class="btn-primary">
+                    <i class="fas fa-store"></i> Ver catálogo
+                </a>
+            </div>
+            <div class="hero-imagen">
+                <!-- Aquí va una imagen ilustrativa -->
+                <img src="img/hero-utensilios.jpg" alt="Utensilios de repostería">
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CATEGORÍAS DESTACADAS ========== -->
+    <section id="categorias" class="categorias">
+        <div class="container">
+            <h2 class="titulo-seccion">Categorías</h2>
+            <div class="grid-categorias">
+                <div class="categoria-card">
+                    <i class="fas fa-mixer"></i>
+                    <h3>Batidoras</h3>
+                    <p>Eléctricas y manuales</p>
+                </div>
+                <div class="categoria-card">
+                    <i class="fas fa-circle"></i>
+                    <h3>Moldes</h3>
+                    <p>Desmontables, silicona, metálicos</p>
+                </div>
+                <div class="categoria-card">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>Decoración</h3>
+                    <p>Mangas, boquillas, colorantes</p>
+                </div>
+                <div class="categoria-card">
+                    <i class="fas fa-weight-scale"></i>
+                    <h3>Básculas</h3>
+                    <p>Precisión digital</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PRODUCTOS DESTACADOS ========== -->
+    <section id="productos" class="productos">
+        <div class="container">
+            <h2 class="titulo-seccion">Productos Destacados</h2>
+            
+            <!-- Filtros (funcionalidad con JavaScript) -->
+            <div class="filtros">
+                <button class="filtro-btn active" data-filtro="todos">Todos</button>
+                <button class="filtro-btn" data-filtro="batidoras">Batidoras</button>
+                <button class="filtro-btn" data-filtro="moldes">Moldes</button>
+                <button class="filtro-btn" data-filtro="decoracion">Decoración</button>
+            </div>
+
+            <!-- Grid de productos -->
+            <div class="grid-productos" id="lista-productos">
+                <!-- Cada producto se genera dinámicamente con JavaScript -->
+                <!-- Pero aquí tienes la estructura de ejemplo -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CONTACTO ========== -->
+    <section id="contacto" class="contacto">
+        <div class="container">
+            <h2 class="titulo-seccion">Contáctanos</h2>
+            <div class="contacto-grid">
+                <div class="contacto-info">
+                    <h3>¿Tienes dudas?</h3>
+                    <p><i class="fas fa-phone"></i> +51 999 888 777</p>
+                    <p><i class="fas fa-envelope"></i> ventas@reposteriashop.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Principal 123, Lima</p>
+                    <div class="redes-sociales">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <form class="contacto-form" id="form-contacto">
+                    <input type="text" placeholder="Tu nombre" required>
+                    <input type="email" placeholder="Tu correo" required>
+                    <textarea placeholder="¿Qué producto buscas?" rows="4"></textarea>
+                    <button type="submit" class="btn-primary">Enviar mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 ReposteriaShop - Todos los derechos reservados</p>
+            <p>Desarrollado con ❤️ por un estudiante de Ing. Sistemas</p>
+        </div>
+    </footer>
+
+    <!-- Botón flotante de WhatsApp -->
+    <a href="https://wa.me/519999888777" class="btn-whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="js/script.js"></script>
+</body>
+</html>
