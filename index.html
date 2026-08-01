@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReposteriaShop - Utensilios profesionales</title>
     <!-- Google Fonts para tipografías elegantes -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <!-- Font Awesome para íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/estilo.css">
 </head>
+
 <body>
-    
+
     <!-- ========== HEADER / NAVEGACIÓN ========== -->
     <header>
         <div class="container">
@@ -84,7 +88,7 @@
     <section id="productos" class="productos">
         <div class="container">
             <h2 class="titulo-seccion">Productos Destacados</h2>
-            
+
             <!-- Filtros (funcionalidad con JavaScript) -->
             <div class="filtros">
                 <button class="filtro-btn active" data-filtro="todos">Todos</button>
@@ -117,10 +121,10 @@
                         <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                <form class="contacto-form" id="form-contacto">
-                    <input type="text" placeholder="Tu nombre" required>
-                    <input type="email" placeholder="Tu correo" required>
-                    <textarea placeholder="¿Qué producto buscas?" rows="4"></textarea>
+                <form class="contacto-form" action="https://formspree.io/f/mgogjpak" method="POST" id="form-contacto">
+                    <input type="text" name="nombre" placeholder="Tu nombre" required>
+                    <input type="email" name="email" placeholder="Tu correo" required>
+                    <textarea name="mensaje" placeholder="¿Qué producto buscas?" rows="4" required></textarea>
                     <button type="submit" class="btn-primary">Enviar mensaje</button>
                 </form>
             </div>
@@ -143,4 +147,5 @@
     <!-- ========== SCRIPTS ========== -->
     <script src="js/script.js"></script>
 </body>
+
 </html>

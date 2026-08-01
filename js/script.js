@@ -173,12 +173,26 @@ function agregarAlCarrito(e) {
 // ============================================
 // 5. FORMULARIO DE CONTACTO
 // ============================================
+// ============================================
+// 5. FORMULARIO DE CONTACTO CON FORMSPREE
+// ============================================
 const formContacto = document.getElementById('form-contacto');
+
 if (formContacto) {
     formContacto.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('¡Gracias por contactarnos! Te responderemos en menos de 24 horas.');
-        this.reset();
+        // No hacemos e.preventDefault() porque Formspree maneja el envío
+        // Simplemente mostramos un mensaje de confirmación
+        const btnEnviar = this.querySelector('button[type="submit"]');
+        const textoOriginal = btnEnviar.textContent;
+        btnEnviar.textContent = '📤 Enviando...';
+        btnEnviar.disabled = true;
+        
+        // El formulario se envía automáticamente a Formspree
+        // Después de 3 segundos, restauramos el botón (por si hay error)
+        setTimeout(function() {
+            btnEnviar.textContent = textoOriginal;
+            btnEnviar.disabled = false;
+        }, 3000);
     });
 }
 
