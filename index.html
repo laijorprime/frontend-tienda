@@ -139,7 +139,7 @@
         </div>
     </section>
 
-    <!-- ========== FOOTER ========== -->
+        <!-- ========== FOOTER ========== -->
     <footer>
         <div class="container">
             <p>&copy; 2026 ReposteriaShop - Todos los derechos reservados</p>
@@ -152,36 +152,32 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <!-- ============================================ -->
+    <!-- MODAL / VENTANA EMERGENTE DEL CARRITO        -->
+    <!-- ============================================ -->
+    <div id="modal-carrito" class="modal-carrito" style="display: none;">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h2><i class="fas fa-shopping-cart"></i> Mi Carrito</h2>
+                <span class="modal-cerrar" id="cerrar-carrito">&times;</span>
+            </div>
+            <div class="modal-body" id="lista-carrito">
+                <p style="text-align:center; color:#888;">🛒 Tu carrito está vacío</p>
+            </div>
+            <div class="modal-footer">
+                <div class="total-carrito">
+                    <strong>Total: </strong>
+                    <span id="total-carrito">S/ 0.00</span>
+                </div>
+                <button id="btn-finalizar-compra" class="btn-primary">
+                    <i class="fas fa-check"></i> Finalizar Compra
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ========== SCRIPTS ========== -->
     <script src="js/script.js"></script>
 
-
-
-<!-- ============================================ -->
-<!-- MODAL / VENTANA EMERGENTE DEL CARRITO        -->
-<!-- ============================================ -->
-<div id="modal-carrito" class="modal-carrito" style="display: none;">
-    <div class="modal-contenido">
-        <div class="modal-header">
-            <h2><i class="fas fa-shopping-cart"></i> Mi Carrito</h2>
-            <span class="modal-cerrar" id="cerrar-carrito">&times;</span>
-        </div>
-        <div class="modal-body" id="lista-carrito">
-            <p style="text-align:center; color:#888;">🛒 Tu carrito está vacío</p>
-        </div>
-        <div class="modal-footer">
-            <div class="total-carrito">
-                <strong>Total: </strong>
-                <span id="total-carrito">S/ 0.00</span>
-            </div>
-            <button id="btn-finalizar-compra" class="btn-primary">
-                <i class="fas fa-check"></i> Finalizar Compra
-            </button>
-        </div>
-    </div>
-</div>
-
-
 </body>
-
 </html>
