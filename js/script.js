@@ -2,7 +2,7 @@
 // 1. CONFIGURACIÓN
 // ============================================
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://backend-tienda-production-8536.up.railway.app/api'; // Cambiar según el entorno
 let productos = [];
 let cargando = false;
 
@@ -330,6 +330,193 @@ if (formContacto) {
         }, 3000);
     });
 }
+
+// ============================================
+// FUNCIONES PARA EL MODAL DEL CARRITO
+// ============================================
+
+// Elementos del DOM para el carrito
+const modalCarrito = document.getElementById('modal-carrito');
+const cerrarCarrito = document.getElementById('cerrar-carrito');
+const listaCarrito = document.getElementById('lista-carrito');
+const totalCarrito = document.getElementById('total-carrito');
+const btnFinalizar = document.getElementById('btn-finalizar-compra');
+
+// Mostrar el carrito al hacer clic en el ícono del carrito
+document.querySelector('.carrito-icono').addEventListener('click', function(e) {
+    e.stopPropagation();
+    renderizarCarrito();
+    modalCarrito.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Evitar scroll del body
+});
+
+// Cerrar el carrito
+function cerrarModalCarrito() {
+    modalCarrito.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+cerrarCarrito.addEventListener('click', cerrarModalCarrito);
+
+// Cerrar al hacer clic fuera del modal
+modalCarrito.addEventListener('click', function(e) {
+    if (e.target === modalCarrito) {
+        cerrarModalCarrito();
+    }
+});
+
+// Cerrar con la tecla ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modalCarrito.style.display === 'flex') {
+        cerrarModalCarrito();
+    }
+});
+
+// ============================================
+// RENDERIZAR EL CARRITO DENTRO DEL MODAL
+// ============================================
+
+function renderizarCarrito() {
+    const carrito = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
+    
+    if (carrito.length === 0) {
+        listaCarrito.innerHTML = `
+            <div style="text-align:center; padding:40px 0;">
+                <i class="fas fa-shopping-cart" style="font-size:3rem; color:#ddd;"></i>
+                <p style="color:#888; font-size:1.1rem; margin-top:15px;">
+                    🛒 Tu carrito está vacío
+                </p>
+                <p style="color:#aaa; font-size:0.9rem;">
+                    Agrega productos desde nuestro catálogo
+                </p>
+            </div>
+        `;
+        totalCarrito.textContent = 'S/ 0.00';
+        btnFinalizar.style.display = 'none';
+        return;
+    }
+    
+    btnFinalizar.style.display = 'block';
+    
+    // Generar HTML de los items
+    let html = '';
+    let total = 0;
+    
+    carrito.forEach((item, index) => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+        
+        html += `
+            <div class="item-carrito" data-index="${index}">
+                <img src="img/${item.imagen || 'default.jpg'}" 
+                     alt="${item.nombre}"
+                     onerror="this.src='https://via.placeholder.com/60/cccccc/555?text=?'">
+                <div class="info">
+                    <h4>${item.nombre}</h4>
+                    <div class="precio-item">S/ ${item.precio.toFixed(2)} c/u</div>
+                </div>
+                <div class="cantidad-control">
+                    <button class="btn-restar" data-index="${index}">-</button>
+                    <span>${item.cantidad}</span>
+                    <button class="btn-sumar" data-index="${index}">+</button>
+                </div>
+                <button class="btn-eliminar" data-index="${index}">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        `;
+    });
+    
+    listaCarrito.innerHTML = html;
+    totalCarrito.textContent = `S/ ${total.toFixed(2)}`;
+    
+    // ============================================
+    // EVENTOS PARA LOS BOTONES DEL CARRITO
+    // ============================================
+    
+    // Botón sumar (+)
+    document.querySelectorAll('.btn-sumar').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            carrito[index].cantidad += 1;
+            localStorage.setItem('carritoReposteria', JSON.stringify(carrito));
+            renderizarCarrito();
+            actualizarContador();
+        });
+    });
+    
+    // Botón restar (-)
+    document.querySelectorAll('.btn-restar').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            if (carrito[index].cantidad > 1) {
+                carrito[index].cantidad -= 1;
+            } else {
+                carrito.splice(index, 1);
+            }
+            localStorage.setItem('carritoReposteria', JSON.stringify(carrito));
+            renderizarCarrito();
+            actualizarContador();
+        });
+    });
+    
+    // Botón eliminar (🗑️)
+    document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            carrito.splice(index, 1);
+            localStorage.setItem('carritoReposteria', JSON.stringify(carrito));
+            renderizarCarrito();
+            actualizarContador();
+        });
+    });
+}
+
+// ============================================
+// FINALIZAR COMPRA DESDE EL MODAL
+// ============================================
+
+btnFinalizar.addEventListener('click', function() {
+    const carrito = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
+    
+    if (carrito.length === 0) {
+        alert('🛒 El carrito está vacío');
+        return;
+    }
+    
+    // Usar la función finalizarCompra que ya tienes
+    if (typeof finalizarCompra === 'function') {
+        finalizarCompra();
+    } else {
+        // Si no existe la función, crearla aquí
+        const datosPedido = {
+            cliente: {
+                nombre: prompt('Ingresa tu nombre:') || 'Cliente',
+                email: prompt('Ingresa tu email:') || 'cliente@email.com',
+                telefono: prompt('Ingresa tu teléfono:') || '999888777'
+            },
+            productos: carrito.map(item => ({
+                id: item.id,
+                nombre: item.nombre,
+                cantidad: item.cantidad,
+                precio: item.precio
+            })),
+            total: carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
+        };
+        
+        enviarPedido(datosPedido);
+    }
+    
+    // Limpiar carrito después de la compra
+    localStorage.removeItem('carritoReposteria');
+    renderizarCarrito();
+    actualizarContador();
+    
+    // Cerrar modal después de un momento
+    setTimeout(() => {
+        cerrarModalCarrito();
+    }, 1000);
+});
 
 // ============================================
 // 9. INICIALIZAR
