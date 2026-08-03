@@ -508,35 +508,32 @@ footer p:last-child {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 2000;
-    display: none; /* ← Oculto por defecto */
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro semi-transparente */
+    z-index: 9999; /* Asegura que esté por encima de todo */
+    display: none; /* Oculto por defecto */
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s ease;
 }
-/* Cuando el modal está visible, se añade esta clase al body */
+
 body.modal-abierto {
     overflow: hidden; /* Bloquea el scroll del body */
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
 .modal-contenido {
-    background: white;
+    background: #ffffff;
     border-radius: 16px;
     max-width: 600px;
     width: 90%;
     max-height: 80vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     overflow: hidden;
+    position: relative;
+    z-index: 10000; /* Asegura que el contenido esté sobre el fondo */
 }
 
 .modal-header {
@@ -546,6 +543,7 @@ body.modal-abierto {
     padding: 20px 25px;
     border-bottom: 2px solid #f0f0f0;
     background: #fdf6f0;
+    flex-shrink: 0;
 }
 
 .modal-header h2 {
@@ -565,8 +563,9 @@ body.modal-abierto {
     font-weight: bold;
     cursor: pointer;
     color: #999;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     line-height: 1;
+    padding: 0 10px;
 }
 
 .modal-cerrar:hover {
@@ -579,9 +578,66 @@ body.modal-abierto {
     overflow-y: auto;
     padding: 20px 25px;
     min-height: 150px;
+    max-height: 60vh;
 }
 
-/* Estilos para los items del carrito dentro del modal */
+.modal-footer {
+    padding: 20px 25px;
+    border-top: 2px solid #f0f0f0;
+    background: #fafafa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+.total-carrito {
+    font-size: 1.3rem;
+}
+
+.total-carrito strong {
+    color: var(--color-dark);
+}
+
+.total-carrito span {
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+#btn-finalizar-compra {
+    padding: 12px 30px;
+    background: var(--color-secondary);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btn-finalizar-compra:hover {
+    background: #e67e22;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ============================================ */
+/* ESTILOS PARA LOS ITEMS DEL CARRITO          */
+/* ============================================ */
+
 .item-carrito {
     display: flex;
     align-items: center;
@@ -631,7 +687,7 @@ body.modal-abierto {
     background: white;
     cursor: pointer;
     font-weight: bold;
-    transition: var(--transition);
+    transition: all 0.3s ease;
 }
 
 .item-carrito .cantidad-control button:hover {
@@ -652,52 +708,11 @@ body.modal-abierto {
     color: #e74c3c;
     cursor: pointer;
     font-size: 1.2rem;
-    transition: var(--transition);
+    transition: all 0.3s ease;
 }
 
 .item-carrito .btn-eliminar:hover {
     transform: scale(1.2);
-}
-
-.modal-footer {
-    padding: 20px 25px;
-    border-top: 2px solid #f0f0f0;
-    background: #fafafa;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.total-carrito {
-    font-size: 1.3rem;
-}
-
-.total-carrito strong {
-    color: var(--color-dark);
-}
-
-.total-carrito span {
-    color: var(--color-primary);
-    font-weight: bold;
-}
-
-#btn-finalizar-compra {
-    padding: 12px 30px;
-    background: var(--color-secondary);
-    border: none;
-    border-radius: 50px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-#btn-finalizar-compra:hover {
-    background: #e67e22;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
 }
 
 
