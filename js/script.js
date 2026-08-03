@@ -189,7 +189,7 @@ function agregarAlCarrito(e) {
 }
 
 // ============================================
-// 6. MODAL DEL CARRITO
+// 6. MODAL DEL CARRITO - VERSIÓN CORREGIDA
 // ============================================
 
 // Elementos del DOM para el carrito
@@ -200,38 +200,60 @@ const totalCarrito = document.getElementById('total-carrito');
 const btnFinalizar = document.getElementById('btn-finalizar-compra');
 
 // Verificar que los elementos existan
-console.log('🔍 Elementos del modal:');
-console.log('modalCarrito:', modalCarrito);
-console.log('cerrarCarrito:', cerrarCarrito);
-console.log('listaCarrito:', listaCarrito);
-console.log('totalCarrito:', totalCarrito);
-console.log('btnFinalizar:', btnFinalizar);
+console.log('🔍 Verificando elementos del modal:');
+console.log('✅ modalCarrito:', modalCarrito);
+console.log('✅ cerrarCarrito:', cerrarCarrito);
+console.log('✅ listaCarrito:', listaCarrito);
+console.log('✅ totalCarrito:', totalCarrito);
+console.log('✅ btnFinalizar:', btnFinalizar);
 
-// Mostrar el carrito
-document.querySelector('.carrito-icono').addEventListener('click', function(e) {
-    e.stopPropagation();
-    console.log('🛒 Abriendo carrito...');
+// Función para ABRIR el modal (FORZANDO display)
+function abrirModalCarrito() {
+    console.log('🛒 Abriendo modal...');
+    
+    // Verificar que el modal existe
+    if (!modalCarrito) {
+        console.error('❌ Modal no encontrado en el DOM');
+        return;
+    }
+    
+    // FORZAR la visibilidad
+    modalCarrito.style.display = 'flex';
+    modalCarrito.style.visibility = 'visible';
+    modalCarrito.style.opacity = '1';
+    document.body.style.overflow = 'hidden'; // Bloquear scroll
+    
+    // Renderizar el contenido
     renderizarCarrito();
-    if (modalCarrito) {
-        modalCarrito.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    } else {
-        console.error('❌ Modal no encontrado');
-    }
-});
-
-// Cerrar el carrito
-function cerrarModalCarrito() {
-    if (modalCarrito) {
-        modalCarrito.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
+    
+    console.log('✅ Modal abierto');
 }
 
+// Función para CERRAR el modal
+function cerrarModalCarrito() {
+    console.log('❌ Cerrando modal...');
+    
+    if (!modalCarrito) return;
+    
+    modalCarrito.style.display = 'none';
+    modalCarrito.style.visibility = 'hidden';
+    modalCarrito.style.opacity = '0';
+    document.body.style.overflow = 'auto'; // Restaurar scroll
+}
+
+// Evento: clic en el ícono del carrito
+document.querySelector('.carrito-icono').addEventListener('click', function(e) {
+    e.stopPropagation();
+    e.preventDefault(); // Prevenir comportamiento predeterminado
+    abrirModalCarrito();
+});
+
+// Evento: clic en la X para cerrar
 if (cerrarCarrito) {
     cerrarCarrito.addEventListener('click', cerrarModalCarrito);
 }
 
+// Evento: clic fuera del modal
 if (modalCarrito) {
     modalCarrito.addEventListener('click', function(e) {
         if (e.target === modalCarrito) {
@@ -240,22 +262,25 @@ if (modalCarrito) {
     });
 }
 
+// Evento: tecla ESC
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && modalCarrito && modalCarrito.style.display === 'flex') {
         cerrarModalCarrito();
     }
 });
 
-// Renderizar carrito
+// Función para renderizar el contenido del carrito
 function renderizarCarrito() {
     console.log('📦 Renderizando carrito...');
-    const carrito = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
-    console.log('Carrito actual:', carrito);
     
+    // Verificar que el contenedor existe
     if (!listaCarrito) {
         console.error('❌ listaCarrito no encontrado');
         return;
     }
+    
+    const carrito = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
+    console.log('Carrito actual:', carrito);
     
     if (carrito.length === 0) {
         listaCarrito.innerHTML = `
@@ -312,10 +337,12 @@ function renderizarCarrito() {
         btn.addEventListener('click', function() {
             const index = parseInt(this.dataset.index);
             const carritoActual = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
-            carritoActual[index].cantidad += 1;
-            localStorage.setItem('carritoReposteria', JSON.stringify(carritoActual));
-            renderizarCarrito();
-            actualizarContador();
+            if (carritoActual[index]) {
+                carritoActual[index].cantidad += 1;
+                localStorage.setItem('carritoReposteria', JSON.stringify(carritoActual));
+                renderizarCarrito();
+                actualizarContador();
+            }
         });
     });
     
@@ -323,14 +350,16 @@ function renderizarCarrito() {
         btn.addEventListener('click', function() {
             const index = parseInt(this.dataset.index);
             let carritoActual = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
-            if (carritoActual[index].cantidad > 1) {
-                carritoActual[index].cantidad -= 1;
-            } else {
-                carritoActual.splice(index, 1);
+            if (carritoActual[index]) {
+                if (carritoActual[index].cantidad > 1) {
+                    carritoActual[index].cantidad -= 1;
+                } else {
+                    carritoActual.splice(index, 1);
+                }
+                localStorage.setItem('carritoReposteria', JSON.stringify(carritoActual));
+                renderizarCarrito();
+                actualizarContador();
             }
-            localStorage.setItem('carritoReposteria', JSON.stringify(carritoActual));
-            renderizarCarrito();
-            actualizarContador();
         });
     });
     
