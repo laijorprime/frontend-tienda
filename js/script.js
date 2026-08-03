@@ -207,7 +207,10 @@ console.log('✅ listaCarrito:', listaCarrito);
 console.log('✅ totalCarrito:', totalCarrito);
 console.log('✅ btnFinalizar:', btnFinalizar);
 
-// Función para ABRIR el modal (FORZANDO display)
+// ============================================
+// FUNCIÓN PARA ABRIR EL MODAL (VERSIÓN MEJORADA)
+// ============================================
+
 function abrirModalCarrito() {
     console.log('🛒 Abriendo modal...');
     
@@ -217,16 +220,28 @@ function abrirModalCarrito() {
         return;
     }
     
-    // FORZAR la visibilidad
-    modalCarrito.style.display = 'flex';
-    modalCarrito.style.visibility = 'visible';
-    modalCarrito.style.opacity = '1';
+    // FORZAR la visibilidad con estilos inline (más agresivo)
+    modalCarrito.style.cssText = `
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(0, 0, 0, 0.7) !important;
+        z-index: 9999 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    `;
+    
     document.body.style.overflow = 'hidden'; // Bloquear scroll
     
     // Renderizar el contenido
     renderizarCarrito();
     
-    console.log('✅ Modal abierto');
+    console.log('✅ Modal abierto (forzado)');
 }
 
 // Función para CERRAR el modal
@@ -235,9 +250,13 @@ function cerrarModalCarrito() {
     
     if (!modalCarrito) return;
     
-    modalCarrito.style.display = 'none';
-    modalCarrito.style.visibility = 'hidden';
-    modalCarrito.style.opacity = '0';
+    // Restaurar estilos ocultos
+    modalCarrito.style.cssText = `
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    `;
+    
     document.body.style.overflow = 'auto'; // Restaurar scroll
 }
 
@@ -427,10 +446,6 @@ function finalizarCompra() {
 if (btnFinalizar) {
     btnFinalizar.addEventListener('click', finalizarCompra);
 }
-
-const modal = document.getElementById('modal-carrito');
-modal.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; display:flex; justify-content:center; align-items:center;';
-
 
 // ============================================
 // 8. INICIALIZAR
