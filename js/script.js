@@ -428,6 +428,10 @@ if (btnFinalizar) {
     btnFinalizar.addEventListener('click', finalizarCompra);
 }
 
+const modal = document.getElementById('modal-carrito');
+modal.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; display:flex; justify-content:center; align-items:center;';
+
+
 // ============================================
 // 8. INICIALIZAR
 // ============================================
