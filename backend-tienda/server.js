@@ -4,10 +4,28 @@
 
 const express = require('express');
 const app = express();
-const PORT = 3000;
+
+// ============ CAMBIO 1: PUERTO DINÁMICO ============
+// Railway asigna un puerto automáticamente, usamos process.env.PORT
+const PORT = process.env.PORT || 3000;
 
 // Middleware para procesar JSON
 app.use(express.json());
+
+// ============ CAMBIO 2: CORS MEJORADO ============
+// Este middleware debe ir ANTES de las rutas
+app.use((req, res, next) => {
+    // Permitir cualquier origen (en producción, puedes limitarlo a tu dominio)
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    
+    // Responder a las peticiones OPTIONS (pre-flight)
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 // ============ BASE DE DATOS SIMULADA ============
 // (Más adelante la reemplazarás con MongoDB o MySQL)
@@ -49,18 +67,6 @@ const productos = [
 
 let pedidos = [];
 let nextPedidoId = 1;
-
-
-// Agregar ANTES de las rutas
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
 
 // ============ ENDPOINTS (RUTAS) ============
 
@@ -148,9 +154,9 @@ app.post('/api/productos', (req, res) => {
 
 // 6. Guardar un pedido
 app.post('/api/pedidos', (req, res) => {
-    const { cliente, productos, total } = req.body;
+    const { cliente, productos: productosPedido, total } = req.body;
     
-    if (!cliente || !productos || productos.length === 0) {
+    if (!cliente || !productosPedido || productosPedido.length === 0) {
         return res.status(400).json({
             exito: false,
             mensaje: 'Faltan datos del pedido: cliente y productos son obligatorios'
@@ -160,7 +166,7 @@ app.post('/api/pedidos', (req, res) => {
     const nuevoPedido = {
         id: nextPedidoId++,
         cliente: cliente,
-        productos: productos,
+        productos: productosPedido,
         total: total || 0,
         fecha: new Date().toISOString(),
         estado: 'pendiente'
@@ -200,8 +206,7 @@ app.listen(PORT, () => {
     console.log('='.repeat(50));
     console.log('🍰 TIENDA DE UTENSILIOS - BACKEND');
     console.log('='.repeat(50));
-    console.log(`✅ Servidor corriendo en: http://localhost:${PORT}`);
+    console.log(`✅ Servidor corriendo en el puerto: ${PORT}`);
     console.log(`📦 ${productos.length} productos disponibles`);
-    console.log(`📋 Prueba: http://localhost:${PORT}/api/productos`);
     console.log('='.repeat(50));
 });
