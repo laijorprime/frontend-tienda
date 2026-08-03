@@ -512,10 +512,14 @@ footer p:last-child {
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
     z-index: 2000;
-    display: none; /* Oculto por defecto */
+    display: none; /* ← IMPORTANTE: oculto por defecto */
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s ease;
+}
+/* Cuando el modal está visible, se añade esta clase al body */
+body.modal-abierto {
+    overflow: hidden; /* Bloquea el scroll del body */
 }
 
 @keyframes fadeIn {

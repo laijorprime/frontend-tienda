@@ -2,7 +2,7 @@
 // 1. CONFIGURACIÓN
 // ============================================
 
-const API_URL = 'https://backend-tienda-production-8536.up.railway.app/api'; // Cambiar según el entorno
+const API_URL = 'https://backend-tienda-production-8536.up.railway.app/api';
 let productos = [];
 let cargando = false;
 
@@ -18,7 +18,6 @@ async function cargarProductos() {
     if (cargando) return;
     cargando = true;
     
-    // Mostrar mensaje de carga
     if (contenedorProductos) {
         contenedorProductos.innerHTML = `
             <div style="text-align:center; padding:60px 20px; grid-column: 1 / -1;">
@@ -54,79 +53,30 @@ async function cargarProductos() {
     }
 }
 
-// ============================================
-// 3. PRODUCTOS DE RESPALDO (MODO OFFLINE)
-// ============================================
-
 function cargarProductosLocales() {
     productos = [
-        { 
-            id: 1, 
-            nombre: 'Batidora Planetaria 5L', 
-            categoria: 'batidoras', 
-            precio: 890.00, 
-            imagen: 'batidora-planetaria.jpg', 
-            descripcion: 'Ideal para masas pesadas. Incluye 3 accesorios.' 
-        },
-        { 
-            id: 2, 
-            nombre: 'Set de Moldes Desmontables', 
-            categoria: 'moldes', 
-            precio: 120.00, 
-            imagen: 'moldes-desmontables.jpg', 
-            descripcion: 'Pack de 3 moldes de 20, 24 y 28 cm.' 
-        },
-        { 
-            id: 3, 
-            nombre: 'Manga Pastelera + 12 Boquillas', 
-            categoria: 'decoracion', 
-            precio: 85.00, 
-            imagen: 'manga-pastelera.jpg', 
-            descripcion: 'Set completo para decoración profesional.' 
-        },
-        { 
-            id: 4, 
-            nombre: 'Batidora de Mano 600W', 
-            categoria: 'batidoras', 
-            precio: 230.00, 
-            imagen: 'batidora-mano.jpg', 
-            descripcion: 'Turbo + 5 velocidades. Incluye batidores y gancho.' 
-        },
-        { 
-            id: 5, 
-            nombre: 'Molde Silicona Cupcakes', 
-            categoria: 'moldes', 
-            precio: 45.00, 
-            imagen: 'silicona-cupcakes.jpg', 
-            descripcion: 'Antiadherente, 12 cavidades. Hasta 230°C.' 
-        },
-        { 
-            id: 6, 
-            nombre: 'Kit Colorantes en Gel', 
-            categoria: 'decoracion', 
-            precio: 65.00, 
-            imagen: 'colorantes-gel.jpg', 
-            descripcion: '6 colores intensos para glaseado y fondant.' 
-        }
+        { id: 1, nombre: 'Batidora Planetaria 5L', categoria: 'batidoras', precio: 890.00, imagen: 'batidora-planetaria.jpg', descripcion: 'Ideal para masas pesadas.' },
+        { id: 2, nombre: 'Set de Moldes Desmontables', categoria: 'moldes', precio: 120.00, imagen: 'moldes-desmontables.jpg', descripcion: 'Pack de 3 moldes.' },
+        { id: 3, nombre: 'Manga Pastelera + 12 Boquillas', categoria: 'decoracion', precio: 85.00, imagen: 'manga-pastelera.jpg', descripcion: 'Set completo para decoración.' },
+        { id: 4, nombre: 'Batidora de Mano 600W', categoria: 'batidoras', precio: 230.00, imagen: 'batidora-mano.jpg', descripcion: 'Turbo + 5 velocidades.' },
+        { id: 5, nombre: 'Molde Silicona Cupcakes', categoria: 'moldes', precio: 45.00, imagen: 'silicona-cupcakes.jpg', descripcion: 'Antiadherente.' },
+        { id: 6, nombre: 'Kit Colorantes en Gel', categoria: 'decoracion', precio: 65.00, imagen: 'colorantes-gel.jpg', descripcion: '6 colores intensos.' }
     ];
     renderizarProductos(productos);
     console.log(`📦 ${productos.length} productos locales cargados (modo respaldo)`);
 }
 
 // ============================================
-// 4. RENDERIZAR PRODUCTOS EN EL GRID (MEJORADO)
+// 3. RENDERIZAR PRODUCTOS
 // ============================================
 
 function renderizarProductos(lista) {
-    // VALIDACIÓN 1: Verificar que el contenedor existe
     if (!contenedorProductos) {
         console.error('❌ Contenedor de productos no encontrado');
         return;
     }
     
-    // VALIDACIÓN 2: Verificar que la lista existe y tiene elementos
     if (!lista || lista.length === 0) {
-        console.warn('⚠️ Lista de productos vacía');
         contenedorProductos.innerHTML = `
             <div style="text-align:center; padding:60px 20px; grid-column: 1 / -1;">
                 <p style="font-size:1.2rem; color:#777;">📦 No hay productos disponibles</p>
@@ -135,16 +85,13 @@ function renderizarProductos(lista) {
         return;
     }
     
-    // VALIDACIÓN 3: Limpiar el contenedor ANTES de renderizar
     contenedorProductos.innerHTML = '';
     
-    // Renderizar cada producto
     lista.forEach(producto => {
         const card = document.createElement('div');
         card.className = 'producto-card';
         card.dataset.categoria = producto.categoria || 'general';
         
-        // Manejar imagen con respaldo
         const imagenSrc = producto.imagen ? `img/${producto.imagen}` : 'https://via.placeholder.com/260x220/f0f0f0/c0392b?text=Sin+Imagen';
         
         card.innerHTML = `
@@ -164,7 +111,6 @@ function renderizarProductos(lista) {
         contenedorProductos.appendChild(card);
     });
     
-    // Asignar eventos a los botones "Agregar"
     document.querySelectorAll('.btn-agregar').forEach(btn => {
         btn.addEventListener('click', agregarAlCarrito);
     });
@@ -173,17 +119,15 @@ function renderizarProductos(lista) {
 }
 
 // ============================================
-// 5. FILTROS POR CATEGORÍA
+// 4. FILTROS
 // ============================================
 
 botonesFiltro.forEach(btn => {
     btn.addEventListener('click', function() {
-        // Quitar clase active de todos
         botonesFiltro.forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         
         const filtro = this.dataset.filtro;
-        
         if (filtro === 'todos') {
             renderizarProductos(productos);
         } else {
@@ -194,7 +138,7 @@ botonesFiltro.forEach(btn => {
 });
 
 // ============================================
-// 6. CARRITO DE COMPRAS (LocalStorage)
+// 5. CARRITO DE COMPRAS
 // ============================================
 
 let carrito = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
@@ -219,7 +163,6 @@ function agregarAlCarrito(e) {
         return;
     }
     
-    // Buscar si ya existe en el carrito
     const existente = carrito.find(item => item.id === id);
     
     if (existente) {
@@ -237,7 +180,6 @@ function agregarAlCarrito(e) {
     localStorage.setItem('carritoReposteria', JSON.stringify(carrito));
     actualizarContador();
     
-    // Feedback visual
     btn.textContent = '✅ Agregado';
     btn.style.background = '#27ae60';
     setTimeout(() => {
@@ -246,93 +188,8 @@ function agregarAlCarrito(e) {
     }, 1500);
 }
 
-function verCarrito() {
-    console.log('=== MI CARRITO ===');
-    carrito.forEach(item => {
-        console.log(`${item.nombre} x${item.cantidad} = S/ ${(item.precio * item.cantidad).toFixed(2)}`);
-    });
-    const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-    console.log(`TOTAL: S/ ${total.toFixed(2)}`);
-}
-
 // ============================================
-// 7. ENVIAR PEDIDO AL BACKEND
-// ============================================
-
-async function enviarPedido(datosPedido) {
-    try {
-        const respuesta = await fetch(`${API_URL}/pedidos`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datosPedido)
-        });
-        
-        const resultado = await respuesta.json();
-        
-        if (resultado.exito) {
-            console.log('✅ Pedido enviado:', resultado.pedido);
-            alert(`✅ ¡Pedido #${resultado.pedido.id} registrado!`);
-            return resultado.pedido;
-        } else {
-            console.error('Error al enviar pedido:', resultado.mensaje);
-            alert(`❌ Error: ${resultado.mensaje}`);
-            return null;
-        }
-    } catch (error) {
-        console.error('Error de conexión:', error);
-        alert('❌ No se pudo conectar con el servidor. Revisa que el backend esté corriendo.');
-        return null;
-    }
-}
-
-function finalizarCompra() {
-    if (carrito.length === 0) {
-        alert('🛒 El carrito está vacío');
-        return;
-    }
-    
-    const datosPedido = {
-        cliente: {
-            nombre: prompt('Ingresa tu nombre:') || 'Cliente',
-            email: prompt('Ingresa tu email:') || 'cliente@email.com',
-            telefono: prompt('Ingresa tu teléfono:') || '999888777'
-        },
-        productos: carrito.map(item => ({
-            id: item.id,
-            nombre: item.nombre,
-            cantidad: item.cantidad,
-            precio: item.precio
-        })),
-        total: carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
-    };
-    
-    enviarPedido(datosPedido);
-}
-
-// ============================================
-// 8. FORMULARIO DE CONTACTO CON FORMSPREE
-// ============================================
-
-const formContacto = document.getElementById('form-contacto');
-
-if (formContacto) {
-    formContacto.addEventListener('submit', function(e) {
-        const btnEnviar = this.querySelector('button[type="submit"]');
-        const textoOriginal = btnEnviar.textContent;
-        btnEnviar.textContent = '📤 Enviando...';
-        btnEnviar.disabled = true;
-        
-        setTimeout(function() {
-            btnEnviar.textContent = textoOriginal;
-            btnEnviar.disabled = false;
-        }, 3000);
-    });
-}
-
-// ============================================
-// FUNCIONES PARA EL MODAL DEL CARRITO
+// 6. MODAL DEL CARRITO
 // ============================================
 
 // Elementos del DOM para el carrito
@@ -342,42 +199,63 @@ const listaCarrito = document.getElementById('lista-carrito');
 const totalCarrito = document.getElementById('total-carrito');
 const btnFinalizar = document.getElementById('btn-finalizar-compra');
 
-// Mostrar el carrito al hacer clic en el ícono del carrito
+// Verificar que los elementos existan
+console.log('🔍 Elementos del modal:');
+console.log('modalCarrito:', modalCarrito);
+console.log('cerrarCarrito:', cerrarCarrito);
+console.log('listaCarrito:', listaCarrito);
+console.log('totalCarrito:', totalCarrito);
+console.log('btnFinalizar:', btnFinalizar);
+
+// Mostrar el carrito
 document.querySelector('.carrito-icono').addEventListener('click', function(e) {
     e.stopPropagation();
+    console.log('🛒 Abriendo carrito...');
     renderizarCarrito();
-    modalCarrito.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Evitar scroll del body
+    if (modalCarrito) {
+        modalCarrito.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    } else {
+        console.error('❌ Modal no encontrado');
+    }
 });
 
 // Cerrar el carrito
 function cerrarModalCarrito() {
-    modalCarrito.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    if (modalCarrito) {
+        modalCarrito.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
 }
 
-cerrarCarrito.addEventListener('click', cerrarModalCarrito);
+if (cerrarCarrito) {
+    cerrarCarrito.addEventListener('click', cerrarModalCarrito);
+}
 
-// Cerrar al hacer clic fuera del modal
-modalCarrito.addEventListener('click', function(e) {
-    if (e.target === modalCarrito) {
-        cerrarModalCarrito();
-    }
-});
+if (modalCarrito) {
+    modalCarrito.addEventListener('click', function(e) {
+        if (e.target === modalCarrito) {
+            cerrarModalCarrito();
+        }
+    });
+}
 
-// Cerrar con la tecla ESC
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modalCarrito.style.display === 'flex') {
+    if (e.key === 'Escape' && modalCarrito && modalCarrito.style.display === 'flex') {
         cerrarModalCarrito();
     }
 });
 
-// ============================================
-// RENDERIZAR EL CARRITO DENTRO DEL MODAL
-// ============================================
-
+// Renderizar carrito
 function renderizarCarrito() {
+    console.log('📦 Renderizando carrito...');
     const carrito = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
+    console.log('Carrito actual:', carrito);
+    
+    if (!listaCarrito) {
+        console.error('❌ listaCarrito no encontrado');
+        return;
+    }
     
     if (carrito.length === 0) {
         listaCarrito.innerHTML = `
@@ -391,14 +269,13 @@ function renderizarCarrito() {
                 </p>
             </div>
         `;
-        totalCarrito.textContent = 'S/ 0.00';
-        btnFinalizar.style.display = 'none';
+        if (totalCarrito) totalCarrito.textContent = 'S/ 0.00';
+        if (btnFinalizar) btnFinalizar.style.display = 'none';
         return;
     }
     
-    btnFinalizar.style.display = 'block';
+    if (btnFinalizar) btnFinalizar.style.display = 'block';
     
-    // Generar HTML de los items
     let html = '';
     let total = 0;
     
@@ -428,44 +305,41 @@ function renderizarCarrito() {
     });
     
     listaCarrito.innerHTML = html;
-    totalCarrito.textContent = `S/ ${total.toFixed(2)}`;
+    if (totalCarrito) totalCarrito.textContent = `S/ ${total.toFixed(2)}`;
     
-    // ============================================
-    // EVENTOS PARA LOS BOTONES DEL CARRITO
-    // ============================================
-    
-    // Botón sumar (+)
+    // Eventos de los botones del carrito
     document.querySelectorAll('.btn-sumar').forEach(btn => {
         btn.addEventListener('click', function() {
             const index = parseInt(this.dataset.index);
-            carrito[index].cantidad += 1;
-            localStorage.setItem('carritoReposteria', JSON.stringify(carrito));
+            const carritoActual = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
+            carritoActual[index].cantidad += 1;
+            localStorage.setItem('carritoReposteria', JSON.stringify(carritoActual));
             renderizarCarrito();
             actualizarContador();
         });
     });
     
-    // Botón restar (-)
     document.querySelectorAll('.btn-restar').forEach(btn => {
         btn.addEventListener('click', function() {
             const index = parseInt(this.dataset.index);
-            if (carrito[index].cantidad > 1) {
-                carrito[index].cantidad -= 1;
+            let carritoActual = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
+            if (carritoActual[index].cantidad > 1) {
+                carritoActual[index].cantidad -= 1;
             } else {
-                carrito.splice(index, 1);
+                carritoActual.splice(index, 1);
             }
-            localStorage.setItem('carritoReposteria', JSON.stringify(carrito));
+            localStorage.setItem('carritoReposteria', JSON.stringify(carritoActual));
             renderizarCarrito();
             actualizarContador();
         });
     });
     
-    // Botón eliminar (🗑️)
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
         btn.addEventListener('click', function() {
             const index = parseInt(this.dataset.index);
-            carrito.splice(index, 1);
-            localStorage.setItem('carritoReposteria', JSON.stringify(carrito));
+            let carritoActual = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
+            carritoActual.splice(index, 1);
+            localStorage.setItem('carritoReposteria', JSON.stringify(carritoActual));
             renderizarCarrito();
             actualizarContador();
         });
@@ -473,60 +347,63 @@ function renderizarCarrito() {
 }
 
 // ============================================
-// FINALIZAR COMPRA DESDE EL MODAL
+// 7. FINALIZAR COMPRA
 // ============================================
 
-btnFinalizar.addEventListener('click', function() {
+async function enviarPedido(datosPedido) {
+    try {
+        const respuesta = await fetch(`${API_URL}/pedidos`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosPedido)
+        });
+        const resultado = await respuesta.json();
+        if (resultado.exito) {
+            alert(`✅ ¡Pedido #${resultado.pedido.id} registrado!`);
+            localStorage.removeItem('carritoReposteria');
+            renderizarCarrito();
+            actualizarContador();
+            cerrarModalCarrito();
+        } else {
+            alert(`❌ Error: ${resultado.mensaje}`);
+        }
+    } catch (error) {
+        alert('❌ No se pudo conectar con el servidor.');
+    }
+}
+
+function finalizarCompra() {
     const carrito = JSON.parse(localStorage.getItem('carritoReposteria')) || [];
-    
     if (carrito.length === 0) {
         alert('🛒 El carrito está vacío');
         return;
     }
-    
-    // Usar la función finalizarCompra que ya tienes
-    if (typeof finalizarCompra === 'function') {
-        finalizarCompra();
-    } else {
-        // Si no existe la función, crearla aquí
-        const datosPedido = {
-            cliente: {
-                nombre: prompt('Ingresa tu nombre:') || 'Cliente',
-                email: prompt('Ingresa tu email:') || 'cliente@email.com',
-                telefono: prompt('Ingresa tu teléfono:') || '999888777'
-            },
-            productos: carrito.map(item => ({
-                id: item.id,
-                nombre: item.nombre,
-                cantidad: item.cantidad,
-                precio: item.precio
-            })),
-            total: carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
-        };
-        
-        enviarPedido(datosPedido);
-    }
-    
-    // Limpiar carrito después de la compra
-    localStorage.removeItem('carritoReposteria');
-    renderizarCarrito();
-    actualizarContador();
-    
-    // Cerrar modal después de un momento
-    setTimeout(() => {
-        cerrarModalCarrito();
-    }, 1000);
-});
+    const datosPedido = {
+        cliente: {
+            nombre: prompt('Ingresa tu nombre:') || 'Cliente',
+            email: prompt('Ingresa tu email:') || 'cliente@email.com',
+            telefono: prompt('Ingresa tu teléfono:') || '999888777'
+        },
+        productos: carrito.map(item => ({
+            id: item.id,
+            nombre: item.nombre,
+            cantidad: item.cantidad,
+            precio: item.precio
+        })),
+        total: carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
+    };
+    enviarPedido(datosPedido);
+}
+
+if (btnFinalizar) {
+    btnFinalizar.addEventListener('click', finalizarCompra);
+}
 
 // ============================================
-// 9. INICIALIZAR
+// 8. INICIALIZAR
 // ============================================
 
-// Cargar productos desde el backend
 cargarProductos();
-
-// Actualizar contador del carrito
 actualizarContador();
-
 console.log('🍰 Tienda de utensilios inicializada');
 console.log('🔗 Conectando al backend en:', API_URL);
