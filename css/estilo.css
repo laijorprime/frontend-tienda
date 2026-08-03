@@ -493,7 +493,11 @@ footer p:last-child {
     }
 }
 
-
+/* ========== ANIMACIÓN DE CARGA ========== */
+@keyframes girar {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 
 }
