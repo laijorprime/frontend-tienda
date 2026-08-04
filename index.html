@@ -15,28 +15,29 @@
 </head>
 
 <body>
-
-    <!-- ========== HEADER / NAVEGACIÓN ========== -->
-    <header>
-        <div class="container">
-            <div class="logo">
-                <i class="fas fa-utensils"></i>
-                <h1>DIRO-<span>Cocina Y Repostería</span></h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#inicio" class="active">Inicio</a></li>
-                    <li><a href="#productos">Productos</a></li>
-                    <li><a href="#categorias">Categorías</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
-                </ul>
-            </nav>
-            <div class="carrito-icono">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="contador">0</span>
-            </div>
+<!-- ========== HEADER / NAVEGACIÓN ========== -->
+<header>
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-utensils"></i>
+            <h1>DIRO-<span>Cocina Y Repostería</span></h1>
         </div>
-    </header>
+        <nav>
+            <ul>
+                <li><a href="#inicio" class="active">Inicio</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#categorias">Categorías</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#" id="btn-perfil" style="display:none;">Mi Cuenta</a></li>
+                <li><a href="#" id="btn-logout" style="display:none;">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+        <div class="carrito-icono">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="contador">0</span>
+        </div>
+    </div>
+</header>
 
     <!-- ========== HERO / BANNER PRINCIPAL ========== -->
     <section id="inicio" class="hero">
@@ -172,6 +173,29 @@
             </div>
         </div>
     </div>
+
+    <script>
+    // Verificar autenticación
+    const token = localStorage.getItem('token');
+    const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+    
+    if (token && usuario) {
+        const btnPerfil = document.getElementById('btn-perfil');
+        const btnLogout = document.getElementById('btn-logout');
+        
+        btnPerfil.style.display = 'inline-block';
+        btnLogout.style.display = 'inline-block';
+        
+        btnPerfil.textContent = '👤 ' + usuario.nombre;
+        
+        btnLogout.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            window.location.href = 'login.html';
+        });
+    }
+</script>
 
     <!-- ========== SCRIPTS (SIEMPRE AL FINAL) ========== -->
     <script src="js/script.js"></script>
