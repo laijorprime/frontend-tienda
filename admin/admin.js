@@ -20,6 +20,15 @@ const formProducto = document.getElementById('form-producto');
 const modalTitulo = document.getElementById('modal-titulo');
 const productoId = document.getElementById('producto-id');
 
+// ============ ELEMENTOS PARA SUBIR IMÁGENES ============
+const inputImagen = document.getElementById('imagen-upload');
+const previewImagen = document.getElementById('preview-imagen');
+const previewImg = document.getElementById('preview-img');
+const imagenUrl = document.getElementById('imagen-url');
+const imagenPublicId = document.getElementById('imagen-public-id');
+const btnEliminarImagen = document.getElementById('btn-eliminar-imagen');
+const inputImagenTexto = document.getElementById('imagen');
+
 // ============ LOGIN ============
 formLogin.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -74,6 +83,115 @@ document.querySelectorAll('nav ul li a').forEach(link => {
     });
 });
 
+// ============ SUBIR IMAGEN A CLOUDINARY ============
+
+// Subir imagen al seleccionar archivo
+inputImagen.addEventListener('change', async function(e) {
+    const file = this.files[0];
+    if (!file) return;
+    
+    // Validar tipo de archivo
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!tiposPermitidos.includes(file.type)) {
+        alert('❌ Formato no permitido. Usa JPG, PNG, WEBP o GIF.');
+        this.value = '';
+        return;
+    }
+    
+    // Validar tamaño (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+        alert('❌ La imagen es demasiado grande. Máximo 5MB.');
+        this.value = '';
+        return;
+    }
+    
+    // Mostrar preview local
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewImagen.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+    
+    try {
+        const formData = new FormData();
+        formData.append('imagen', file);
+        
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('❌ Debes iniciar sesión como administrador');
+            return;
+        }
+        
+        const response = await fetch(`${API_URL}/upload`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.exito) {
+            // Guardar URL de la imagen
+            imagenUrl.value = data.imagen.url;
+            imagenPublicId.value = data.imagen.public_id;
+            inputImagenTexto.value = data.imagen.url;
+            
+            console.log('✅ Imagen subida a Cloudinary:', data.imagen.public_id);
+        } else {
+            alert('❌ Error al subir imagen: ' + data.mensaje);
+            previewImagen.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error al conectar con el servidor');
+    }
+});
+
+// Eliminar imagen subida
+btnEliminarImagen.addEventListener('click', async function() {
+    const publicId = imagenPublicId.value;
+    
+    if (!publicId) {
+        previewImagen.style.display = 'none';
+        imagenUrl.value = '';
+        imagenPublicId.value = '';
+        inputImagenTexto.value = '';
+        inputImagen.value = '';
+        return;
+    }
+    
+    if (!confirm('¿Eliminar esta imagen de Cloudinary?')) return;
+    
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/upload/${publicId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.exito) {
+            previewImagen.style.display = 'none';
+            imagenUrl.value = '';
+            imagenPublicId.value = '';
+            inputImagenTexto.value = '';
+            inputImagen.value = '';
+            alert('✅ Imagen eliminada de Cloudinary');
+        } else {
+            alert('❌ Error al eliminar imagen: ' + data.mensaje);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error al eliminar imagen');
+    }
+});
+
 // ============ CARGAR PRODUCTOS ============
 async function cargarProductos() {
     try {
@@ -99,9 +217,14 @@ function renderizarProductosAdmin(productos) {
     let html = '';
     productos.forEach(producto => {
         const precio = parseFloat(producto.precio) || 0;
+        // Si la imagen es una URL de Cloudinary, usarla directamente
+        const imagenSrc = producto.imagen && producto.imagen.startsWith('http') 
+            ? producto.imagen 
+            : `../img/${producto.imagen || 'default.jpg'}`;
+        
         html += `
             <div class="producto-admin-card" data-id="${producto.id}">
-                <img src="../img/${producto.imagen || 'default.jpg'}" alt="${producto.nombre}" 
+                <img src="${imagenSrc}" alt="${producto.nombre}" 
                      onerror="this.src='https://via.placeholder.com/60/cccccc/555?text=?'">
                 <div class="info">
                     <h4>${producto.nombre}</h4>
@@ -142,6 +265,12 @@ btnAgregar.addEventListener('click', function() {
     modalTitulo.textContent = 'Agregar Producto';
     productoId.value = '';
     formProducto.reset();
+    // Limpiar vista previa de imagen
+    previewImagen.style.display = 'none';
+    imagenUrl.value = '';
+    imagenPublicId.value = '';
+    inputImagenTexto.value = '';
+    inputImagen.value = '';
     modalProducto.style.display = 'flex';
 });
 
@@ -164,24 +293,30 @@ formProducto.addEventListener('submit', async function(e) {
         categoria: document.getElementById('categoria').value,
         precio: parseFloat(document.getElementById('precio').value),
         stock: parseInt(document.getElementById('stock').value),
-        imagen: document.getElementById('imagen').value || 'default.jpg',
+        imagen: imagenUrl.value || document.getElementById('imagen').value || 'default.jpg',
         descripcion: document.getElementById('descripcion').value
     };
     
     try {
         let respuesta;
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+        
         if (id) {
             // Editar
             respuesta = await fetch(`${API_URL}/productos/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(datos)
             });
         } else {
             // Crear
             respuesta = await fetch(`${API_URL}/productos`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(datos)
             });
         }
@@ -216,6 +351,24 @@ async function abrirModalEditar(id) {
             document.getElementById('stock').value = p.stock;
             document.getElementById('imagen').value = p.imagen || '';
             document.getElementById('descripcion').value = p.descripcion || '';
+            
+            // Cargar imagen existente
+            const imagenActual = p.imagen || '';
+            if (imagenActual && imagenActual !== 'default.jpg' && imagenActual.startsWith('http')) {
+                previewImg.src = imagenActual;
+                previewImagen.style.display = 'block';
+                imagenUrl.value = imagenActual;
+                // Intentar extraer public_id
+                const match = imagenActual.match(/\/upload\/(?:v\d+\/)?(.+)\.\w+$/);
+                if (match) {
+                    imagenPublicId.value = match[1];
+                }
+            } else {
+                previewImagen.style.display = 'none';
+                imagenUrl.value = '';
+                imagenPublicId.value = '';
+            }
+            
             modalProducto.style.display = 'flex';
         }
     } catch (error) {
@@ -228,8 +381,12 @@ async function eliminarProducto(id) {
     if (!confirm('¿Seguro que quieres eliminar este producto?')) return;
     
     try {
+        const token = localStorage.getItem('token');
         const respuesta = await fetch(`${API_URL}/productos/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
         const resultado = await respuesta.json();
         
@@ -248,11 +405,18 @@ async function eliminarProducto(id) {
 // ============ CARGAR PEDIDOS ============
 async function cargarPedidos() {
     try {
-        const respuesta = await fetch(`${API_URL}/pedidos`);
+        const token = localStorage.getItem('token');
+        const respuesta = await fetch(`${API_URL}/pedidos`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const datos = await respuesta.json();
         
         if (datos.exito) {
             renderizarPedidos(datos.pedidos);
+        } else {
+            console.error('Error al cargar pedidos:', datos.mensaje);
         }
     } catch (error) {
         console.error('Error al cargar pedidos:', error);
@@ -331,3 +495,4 @@ document.querySelectorAll('.filtro-btn').forEach(btn => {
 });
 
 console.log('🛠️ Panel de administración cargado');
+console.log('🔗 Conectado a:', API_URL);

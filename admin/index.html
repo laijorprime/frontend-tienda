@@ -112,9 +112,25 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="imagen">Nombre de imagen</label>
-                    <input type="text" id="imagen" placeholder="batidora-planetaria.jpg">
-                    <small style="color:#999;">La imagen debe estar en la carpeta <strong>img/</strong></small>
+                    <label for="imagen">URL de imagen (opcional)</label>
+                    <input type="text" id="imagen" placeholder="https://res.cloudinary.com/... o default.jpg">
+                    <small style="color:#999;">Puedes subir una imagen usando el campo de abajo</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="imagen-upload">O subir imagen desde tu computadora</label>
+                    <input type="file" id="imagen-upload" accept="image/*">
+                    <div id="preview-imagen" style="margin-top: 10px; display: none;">
+                        <img id="preview-img" src="" alt="Vista previa" style="max-width: 150px; border-radius: 10px; border: 2px solid #f0e8e3;">
+                        <div style="margin-top: 8px;">
+                            <button type="button" id="btn-eliminar-imagen" style="padding: 4px 14px; background: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                <i class="fas fa-trash"></i> Eliminar imagen
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="imagen-url" value="">
+                    <input type="hidden" id="imagen-public-id" value="">
+                    <small style="color:#999;">Formatos: JPG, PNG, WEBP, GIF (máx. 5MB)</small>
                 </div>
 
                 <div class="form-group">
