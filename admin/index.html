@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - ReposteriaShop</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Estilos globales -->
+    <link rel="stylesheet" href="../css/estilo.css">
+    
+    <!-- Estilos específicos del panel de administración -->
+    <link rel="stylesheet" href="admin_style.css">
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- HEADER / NAVEGACIÓN DEL ADMIN              -->
+    <!-- ========================================== -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                <h1>Admin <span>ReposteriaShop</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#productos" class="active">Productos</a></li>
+                    <li><a href="#pedidos">Pedidos</a></li>
+                    <li><a href="#" id="btn-cerrar-sesion">Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- SECCIÓN: GESTIÓN DE PRODUCTOS              -->
+    <!-- ========================================== -->
+    <section id="productos" class="admin-section">
+        <div class="container">
+            <div class="admin-header">
+                <h2>📦 Gestión de Productos</h2>
+                <button class="btn-primary" id="btn-agregar-producto">
+                    <i class="fas fa-plus"></i> Agregar Producto
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filtros">
+                <button class="filtro-btn active" data-filtro="todos">Todos</button>
+                <button class="filtro-btn" data-filtro="batidoras">Batidoras</button>
+                <button class="filtro-btn" data-filtro="moldes">Moldes</button>
+                <button class="filtro-btn" data-filtro="decoracion">Decoración</button>
+            </div>
+
+            <!-- Lista de productos -->
+            <div id="lista-productos-admin">
+                <!-- Se llena con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SECCIÓN: PEDIDOS                           -->
+    <!-- ========================================== -->
+    <section id="pedidos" class="admin-section" style="display: none;">
+        <div class="container">
+            <h2 class="titulo-seccion">📋 Pedidos</h2>
+            <div id="lista-pedidos">
+                <!-- Se llena con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- MODAL: AGREGAR / EDITAR PRODUCTO           -->
+    <!-- ========================================== -->
+    <div id="modal-producto" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <h3 id="modal-titulo">Agregar Producto</h3>
+            <form id="form-producto">
+                <input type="hidden" id="producto-id">
+
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" placeholder="Ej: Batidora Planetaria 5L" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria" required>
+                        <option value="batidoras">Batidoras</option>
+                        <option value="moldes">Moldes</option>
+                        <option value="decoracion">Decoración</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="precio">Precio (S/)</label>
+                    <input type="number" id="precio" step="0.01" placeholder="890.00" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" placeholder="10" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="imagen">Nombre de imagen</label>
+                    <input type="text" id="imagen" placeholder="batidora-planetaria.jpg">
+                    <small style="color:#999;">La imagen debe estar en la carpeta <strong>img/</strong></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" rows="3" placeholder="Ideal para masas pesadas..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- LOGIN (Pantalla de autenticación)          -->
+    <!-- ========================================== -->
+    <div id="login-container" class="login-container">
+        <div class="login-box">
+            <h2><i class="fas fa-crown"></i> Admin</h2>
+            <p>Ingresa tu contraseña para acceder</p>
+            <form id="form-login">
+                <input type="password" id="password-login" placeholder="Contraseña" required>
+                <button type="submit" class="btn-primary">Ingresar</button>
+            </form>
+            <p id="error-login" style="color: #e74c3c; display: none; margin-top: 10px;">
+                ❌ Contraseña incorrecta
+            </p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SCRIPTS                                    -->
+    <!-- ========================================== -->
+    <script src="admin.js"></script>
+</body>
+</html>
