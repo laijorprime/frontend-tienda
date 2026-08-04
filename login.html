@@ -3,158 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - ReposteriaShop</title>
+    <title>Iniciar Sesión - DIRO Cocina y Repostería</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/estilo.css">
     <style>
-        .auth-container {
-            max-width: 400px;
-            margin: 80px auto;
-            padding: 40px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        /* ===== Estilos específicos para autenticación ===== */
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #fdf6f0;
         }
-        .auth-container h2 {
+        
+        .auth-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .auth-box {
+            background: white;
+            padding: 40px 35px;
+            border-radius: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0e8e3;
+        }
+
+        .auth-box .logo-icon {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #c0392b;
+            margin-bottom: 10px;
+        }
+
+        .auth-box h2 {
             font-family: 'Playfair Display', serif;
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
         }
-        .auth-container p {
+
+        .auth-box .subtitle {
             text-align: center;
             color: #888;
             margin-bottom: 30px;
+            font-size: 0.95rem;
         }
-        .auth-container input {
+
+        .auth-box .form-group {
+            margin-bottom: 18px;
+        }
+
+        .auth-box label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .auth-box input {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            border: 2px solid #e0d8d2;
+            border-radius: 12px;
             font-size: 1rem;
-            margin-bottom: 15px;
             transition: all 0.3s ease;
+            background: #faf8f6;
         }
-        .auth-container input:focus {
+
+        .auth-box input:focus {
             border-color: #c0392b;
             outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.08);
         }
-        .auth-container .btn-primary {
+
+        .auth-box .btn-primary {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, #c0392b, #e74c3c);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             color: white;
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-top: 5px;
         }
-        .auth-container .btn-primary:hover {
+
+        .auth-box .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(192, 57, 43, 0.3);
+            box-shadow: 0 8px 25px rgba(192, 57, 43, 0.35);
         }
-        .auth-container .link {
+
+        .auth-box .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-box .links {
             text-align: center;
             margin-top: 20px;
             color: #888;
+            font-size: 0.95rem;
         }
-        .auth-container .link a {
+
+        .auth-box .links a {
             color: #c0392b;
             text-decoration: none;
             font-weight: 600;
         }
-        .auth-container .link a:hover {
+
+        .auth-box .links a:hover {
             text-decoration: underline;
         }
-        .error-msg {
+
+        .msg-error {
             color: #e74c3c;
             text-align: center;
             display: none;
             margin-bottom: 15px;
-            padding: 10px;
+            padding: 12px;
             background: #fde8e4;
-            border-radius: 8px;
+            border-radius: 10px;
+            font-size: 0.95rem;
         }
-        .success-msg {
+
+        .msg-success {
             color: #27ae60;
             text-align: center;
             display: none;
             margin-bottom: 15px;
-            padding: 10px;
+            padding: 12px;
             background: #e8f8e4;
-            border-radius: 8px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        /* Header simplificado para páginas de auth */
+        .auth-header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .auth-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .auth-header .logo a {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        .auth-header .logo a span {
+            color: #c0392b;
+        }
+        .auth-header .logo a i {
+            color: #c0392b;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .auth-box {
+                padding: 30px 20px;
+            }
+            .auth-box h2 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
-<body>
+<body class="auth-page">
 
-    <!-- ========== HEADER ========== -->
-    <header>
+    <!-- ========== HEADER SIMPLIFICADO ========== -->
+    <header class="auth-header">
         <div class="container">
             <div class="logo">
-                <i class="fas fa-utensils"></i>
-                <h1>DIRO-<span>Cocina Y Repostería</span></h1>
+                <a href="index.html">
+                    <i class="fas fa-utensils"></i>
+                    DIRO-<span>Cocina Y Repostería</span>
+                </a>
             </div>
             <nav>
-                <ul>
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="index.html#productos">Productos</a></li>
-                    <li><a href="index.html#contacto">Contacto</a></li>
-                    <li><a href="#" id="btn-logout" style="display:none;">Cerrar Sesión</a></li>
-                </ul>
+                <a href="index.html" style="color:#555; text-decoration:none; font-weight:500;">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
             </nav>
         </div>
     </header>
 
     <!-- ========== FORMULARIO DE LOGIN ========== -->
-    <div class="container">
-        <div class="auth-container">
-            <h2><i class="fas fa-user-circle"></i> Iniciar Sesión</h2>
-            <p>Accede a tu cuenta para gestionar tus pedidos</p>
-            
-            <div id="error-msg" class="error-msg">❌ Credenciales incorrectas</div>
-            <div id="success-msg" class="success-msg">✅ Inicio de sesión exitoso</div>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="logo-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <h2>Iniciar Sesión</h2>
+            <p class="subtitle">Accede a tu cuenta para gestionar tus pedidos</p>
+
+            <div id="msg-error" class="msg-error">❌ Credenciales incorrectas</div>
+            <div id="msg-success" class="msg-success">✅ Inicio de sesión exitoso</div>
 
             <form id="form-login">
-                <input type="email" id="email" placeholder="Correo electrónico" required>
-                <input type="password" id="password" placeholder="Contraseña" required>
-                <button type="submit" class="btn-primary">Iniciar Sesión</button>
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" placeholder="ejemplo@correo.com" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary" id="btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </button>
             </form>
 
-            <div class="link">
+            <div class="links">
                 ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
             </div>
         </div>
     </div>
 
     <!-- ========== FOOTER ========== -->
-    <footer>
+    <footer style="margin-top: auto;">
         <div class="container">
-            <p>&copy; 2026 ReposteriaShop - Todos los derechos reservados</p>
+            <p>&copy; 2026 DIRO Cocina y Repostería - Todos los derechos reservados</p>
         </div>
     </footer>
 
     <script>
+        // ============================================
+        // LOGIN - FRONTEND
+        // ============================================
+
         const API_URL = 'https://backend-tienda-production-8536.up.railway.app/api';
-        const errorMsg = document.getElementById('error-msg');
-        const successMsg = document.getElementById('success-msg');
+        const formLogin = document.getElementById('form-login');
+        const msgError = document.getElementById('msg-error');
+        const msgSuccess = document.getElementById('msg-success');
+        const btnLogin = document.getElementById('btn-login');
 
         // Si ya está logueado, redirigir
         if (localStorage.getItem('token')) {
             window.location.href = 'index.html';
         }
 
-        document.getElementById('form-login').addEventListener('submit', async function(e) {
+        formLogin.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
             
-            errorMsg.style.display = 'none';
-            successMsg.style.display = 'none';
+            // Ocultar mensajes anteriores
+            msgError.style.display = 'none';
+            msgSuccess.style.display = 'none';
+            
+            // Validaciones básicas
+            if (!email || !password) {
+                msgError.textContent = '❌ Todos los campos son obligatorios';
+                msgError.style.display = 'block';
+                return;
+            }
+            
+            // Deshabilitar botón mientras se procesa
+            btnLogin.disabled = true;
+            btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...';
             
             try {
                 const response = await fetch(`${API_URL}/auth/login`, {
@@ -170,21 +293,25 @@
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('usuario', JSON.stringify(data.usuario));
                     
-                    successMsg.textContent = '✅ ¡Bienvenido, ' + data.usuario.nombre + '!';
-                    successMsg.style.display = 'block';
+                    msgSuccess.textContent = '✅ ¡Bienvenido, ' + data.usuario.nombre + '!';
+                    msgSuccess.style.display = 'block';
                     
                     // Redirigir después de 1.5 segundos
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1500);
                 } else {
-                    errorMsg.textContent = '❌ ' + data.mensaje;
-                    errorMsg.style.display = 'block';
+                    msgError.textContent = '❌ ' + data.mensaje;
+                    msgError.style.display = 'block';
+                    btnLogin.disabled = false;
+                    btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar Sesión';
                 }
             } catch (error) {
-                errorMsg.textContent = '❌ Error de conexión con el servidor';
-                errorMsg.style.display = 'block';
-                console.error('Error:', error);
+                console.error('Error de conexión:', error);
+                msgError.textContent = '❌ Error de conexión con el servidor';
+                msgError.style.display = 'block';
+                btnLogin.disabled = false;
+                btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar Sesión';
             }
         });
     </script>
